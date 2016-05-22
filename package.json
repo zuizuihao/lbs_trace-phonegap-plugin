@@ -1,0 +1,33 @@
+{
+  "name": "com.roadshr.cordova.lbs_trace",
+  "description": "Cordova plugin for LBS Trace",
+  "version": "0.0.4",
+  "homepage": "https://github.com/zuizuihao/lbs_trace-cordova-plugin#readme",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/zuizuihao/lbs_trace-cordova-plugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zuizuihao/lbs_trace-cordova-plugin/issues"
+  },
+  "cordova": {
+    "id": "com.roadshr.cordova.lbs_trace",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "keywords": [
+    "LBS Trace",
+    "Geolocation",
+    "Roadshr"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "Roadshr team",
+  "license": "APL"
+}

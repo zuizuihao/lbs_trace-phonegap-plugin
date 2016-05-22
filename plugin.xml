@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="com.roadshr.cordova.lbs_trace"
+        version="0.0.1">
+
+    <name>LBS Trace Plugin</name>
+    <description>Cordova plugin for LBS Trace</description>
+    <author>roadshr</author>
+    <keywords>LBS Trace,Geolocation,Roadshr</keywords>
+    <license>Apache 2.0 License</license>
+
+    <preference name="API_KEY" />
+
+    <engines>
+        <engine name="cordova" version=">=3.0"/>
+    </engines>
+
+    <js-module src="www/LBSTracePlugin.js" name="LBSTracePlugin">
+            <clobbers target="LBSTracePlugin"/>
+    </js-module>
+
+    <platform name="ios">
+            <config-file target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
+                <string>需要持续定位</string>
+            </config-file>
+
+            <config-file target="*-Info.plist" parent="UIBackgroundModes">
+                <array>
+                    <string>location</string>
+                </array>
+            </config-file> 
+            
+            <config-file target="*-Info.plist" parent="NSAppTransportSecurity">
+                <dict>
+                    <key>NSAllowsArbitraryLoads</key>
+                    <true/>
+                </dict>
+            </config-file>
+            
+            <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
+                <array>
+                    <string>iosLBSTrace</string>
+                </array>
+            </config-file>
+            
+            <config-file target="config.xml" parent="/*">
+                <feature name="LBSTracePlugin">
+                    <param name="ios-package" value="LBSTracePlugin"/>
+                </feature>
+            </config-file>
+
+            <header-file src="src/ios/LBSTracePlugin.h"/>
+            <source-file src="src/ios/LBSTracePlugin.m"/>
+           
+            <framework src="libs/ios/BaiduTrace_iOSSDK_v2.0.5_distribution" custom="true" />
+        </platform>
+        
+    <!-- android -->
+    <platform name="android">
+        <hook type="after_plugin_add" src="scripts/android-install.js" />
+        <hook type="after_plugin_install" src="scripts/android-install.js" />
+        <hook type="before_plugin_rm" src="scripts/android-install.js" />
+        <hook type="before_plugin_uninstall" src="scripts/android-install.js" />
+    
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="LBSTracePlugin">
+                <param name="android-package" value="com.roadshr.cordova.lbs_trace.LBSTracePlugin"/>
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <!-- 这个权限用于进行网络定位-->
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> 
+            <!-- 这个权限用于访问GPS定位-->
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
+            <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+            <!--允许程序连接到已配对的蓝牙设备-->
+            <uses-permission android:name="android.permission.BLUETOOTH"/>
+            <!--允许程序发现和配对蓝牙设备-->
+            <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+            <!-- 用于读取手机当前的状态-->
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+            <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据-->
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <!-- 访问网络，网络定位需要上网-->
+            <uses-permission android:name="android.permission.INTERNET" />
+            <!-- SD卡读取权限，用户写入离线定位数据-->
+            <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+            <!--允许应用读取低级别的系统日志文件 -->
+            <uses-permission android:name="android.permission.READ_LOGS" />
+            <!--允许访问振动设备-->
+            <uses-permission android:name="android.permission.VIBRATE" />
+            <!--屏幕保持唤醒 不锁屏-->
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
+            <!--允许应用程序更改主屏幕中的设置和快捷方式-->
+            <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+        </config-file>
+        
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <service android:name="com.baidu.trace.LBSTraceService" android:enabled="true" android:exported="true" ></service>
+            <meta-data android:name="com.baidu.lbsapi.API_KEY" android:value="$API_KEY" />  
+        </config-file>
+        
+        <framework src="com.android.support:support-v4:+" />
+        <source-file src="src/android/LBSTracePlugin.java" target-dir="src/com/roadshr/cordova/lbs_trace" />
+        <source-file src="libs/android/arm64-v8a/libBaiduTraceSDK_v2_1_10.so" target-dir="libs/arm64-v8a" />
+        <source-file src="libs/android/armeabi/libBaiduTraceSDK_v2_1_10.so" target-dir="libs/armeabi" />
+        <source-file src="libs/android/armeabi-v7a/libBaiduTraceSDK_v2_1_10.so" target-dir="libs/armeabi-v7a" />
+        <source-file src="libs/android/x86/libBaiduTraceSDK_v2_1_10.so" target-dir="libs/x86" />
+        <source-file src="libs/android/x86_64/libBaiduTraceSDK_v2_1_10.so" target-dir="libs/x86_64" />
+        <source-file src="libs/android/BaiduTraceSDK_v2_1_10.jar" target-dir="libs" />
+    </platform>
+</plugin>
